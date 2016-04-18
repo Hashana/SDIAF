@@ -4,6 +4,7 @@
     <h2><%: Title %>.</h2>
     <h3>How to contact us:</h3>
     <address>
+        CoffeeCo<br />
         Barbers Road<br />
         London, <br />
         E15 2PE <br />
