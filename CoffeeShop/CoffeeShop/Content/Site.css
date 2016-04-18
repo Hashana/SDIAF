@@ -36,3 +36,26 @@ input[type="select"] {
         padding: 0;
     }
 }
+
+ /* Change colour of menu (navbar) */
+.navbar-inverse {
+     background-color: #59d284 !important;
+}
+
+
+/* Change font colour of menu (navbar) text */
+.navbar-brand {
+     color: black !important
+}
+
+.navbar-brand:visited {
+     color: black !important
+}
+
+.navbar-default-color {
+     color: black !important
+}
+
+.navbar .nav > li > a {
+    color: black !important
+}
