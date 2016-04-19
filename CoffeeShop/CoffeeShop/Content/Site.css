@@ -18,6 +18,7 @@ body {
     white-space: normal;
 }
 
+
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input[type="text"],
 input[type="password"],
@@ -31,11 +32,19 @@ input[type="select"] {
 @media screen and (min-width: 768px) {
     .jumbotron {
         margin-top: 20px;
+        color: #623718 !important
     }
     .body-content {
         padding: 0;
     }
 }
+
+ h2{
+    color: #623718 !important
+}
+ b {
+      color: #f5300b !important
+ }
 
  /* Change colour of menu (navbar) */
 .navbar-inverse {
@@ -68,3 +77,27 @@ input[type="select"] {
     color: #f5300b !important
 }
 
+#slideshow IMG{
+    position:relative;
+    height:250px;
+}
+
+/*#slideshow {
+    position:relative;
+    height:350px;
+}
+
+#slideshow IMG {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:8;
+}
+
+#slideshow IMG.active {
+    z-index:10;
+}
+
+#slideshow IMG.last-active {
+    z-index:9;
+}*/

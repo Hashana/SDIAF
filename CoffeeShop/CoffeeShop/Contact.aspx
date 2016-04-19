@@ -13,12 +13,11 @@
     </address>
 
     <address>
-       <%-- Add in email contact form.
-           <strong>Support:</strong>   <a href="mailto:SDIAF1516@gmail.com">SDIAF1516@gmail.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>--%>
+      <strong>Support:</strong>   <a href="mailto:SDIAF1516@gmail.com">SDIAF1516@gmail.com</a><br />
+       <%-- <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>--%>
     </address>
     <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <div id="googleMap" style="width:500px;height:500px;"><script type="text/javascript">  
+    <div id="googleMap" style="width:100%;height:500px;"><script type="text/javascript">  
         var map;
 
         var position = { lat: 51.5335598, lng: -0.0146764 };
