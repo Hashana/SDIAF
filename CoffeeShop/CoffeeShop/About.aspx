@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2><%: Title %>.</h2>
-    <h4>In pursuit of perfection from the farm to the cup...</h4>
+    <h4><i>In pursuit of perfection from the farm to the cup...</i></h4>
      <img src ="images/beansAndCup.jpg" style="width:335px;height:150px;float: right">
      <br/>
     <p>Our company has a passion for coffee. We aim to seek the finest product whilst still providing you with the best prices for coffee.</p>
