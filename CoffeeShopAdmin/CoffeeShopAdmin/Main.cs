@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace CoffeeShopAdmin
     {
         private string selectedFilePath = "";
         private string targetPath = @"D:\Uni\SDIAF\Coffeeshop\images\";
+        private int editId;
 
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=D:\Uni\SDIAF\CoffeeShop\CoffeeShop\CoffeeShop\App_Data\aspnet-CoffeeShop-20160418102437.mdf;Initial Catalog=aspnet-CoffeeShop-20160418102437;Integrated Security=True");
         public Main()
@@ -35,7 +37,16 @@ namespace CoffeeShopAdmin
             txtDescription.Text = "";
             cmbStrength.Text = "";
             cmbGrind.Text = "";
+            txtQuickSearch.Text = "";
             pbCoffee.Image = null;
+            btnUpdate.Enabled = false;
+            btnCancelUpdate.Enabled = false;
+            btnEdit.Enabled = true;
+            btnDelete.Enabled = true;
+            btnAdd.Enabled = true;
+            btnSearch.Enabled = true;
+            btnClear.Enabled = true;
+            btnQuickSearch.Enabled = true;
         }
 
         #region AddCoffee Methods
@@ -64,7 +75,7 @@ namespace CoffeeShopAdmin
 
             try
             {
-                System.IO.File.Copy(selectedFilePath, destFile);
+                System.IO.File.Copy(selectedFilePath, destFile, true);
             }
             catch (Exception e)
             {
@@ -96,7 +107,7 @@ namespace CoffeeShopAdmin
                 addCoffee.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Coffee Added", "Entry Added!", MessageBoxButtons.OK);
-                //update dtg
+                UpdateGrid(dtgUpdateStock, "SELECT * FROM Coffee"); 
                 SetUpForm();
             }
           
@@ -105,10 +116,6 @@ namespace CoffeeShopAdmin
 
         private void UpdateGrid(DataGridView grid, string query)
         {
-           // SqlCommand getData = new SqlCommand(query,con);
-            //con.Open();
-         //   var dataReader = getData.ExecuteReader();
-
             var dt = new DataTable();
             using (var da = new SqlDataAdapter(query, con))
             {
@@ -118,9 +125,10 @@ namespace CoffeeShopAdmin
             con.Close();
 
             grid.AutoSize = true;
-            grid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-           
+            grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            grid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            grid.Columns[7].Visible = false;
 
 
         }
@@ -129,13 +137,134 @@ namespace CoffeeShopAdmin
 
      
 
-        private void dtgUpdateStock_CellContentClick(object sender, DataGridViewCellEventArgs e)
+  
+
+        #endregion
+
+        #region Delete
+
+        private void btnDelete_Click_1(object sender, EventArgs e)
+        {
+            if (dtgUpdateStock.SelectedRows.Count == 1)
+            {
+                var response = MessageBox.Show("Delete?", "Are you sure you want to delete that entry?", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes)
+                {
+                    // One row selected for deletion
+                    var selected = dtgUpdateStock.SelectedRows[0].Cells[0].Value;
+                    SqlCommand deleteCoffee = new SqlCommand("DELETE FROM Coffee WHERE Id = " + selected, con);
+                    con.Open();
+                    deleteCoffee.ExecuteNonQuery();
+                    con.Close();
+                    File.Delete(targetPath + dtgUpdateStock.SelectedRows[0].Cells[1].Value + ".jpg");
+
+                    MessageBox.Show("Entry has been removed!", "Deleted!", MessageBoxButtons.OK);
+                    UpdateGrid(dtgUpdateStock, "SELECT * FROM Coffee");
+                    pbUpdateCoffee.Image = null;
+
+                }
+            }
+            else
+            {
+                MessageBox.Show("You must make a single selection entry to Delete!", " Delete?", MessageBoxButtons.OK);
+            }
+        }
+
+        #endregion
+        #region Edit
+
+
+        private void btnEdit_Click_1(object sender, EventArgs e)
+        {
+            //check if a row is selected
+            if (dtgUpdateStock.SelectedRows.Count != 1)
+            {
+                // Multiple or no rows selected
+                MessageBox.Show("Please make a single selection to edit!", "Select one row to edit",
+                    MessageBoxButtons.OK);
+            }
+            else
+            {
+                // User has selected a single row - set up edit mode
+                editId = Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[0].Value);
+                txtCoffeeName.Text = dtgUpdateStock.SelectedRows[0].Cells[1].Value.ToString();
+                cmbStrength.Text = dtgUpdateStock.SelectedRows[0].Cells[2].Value.ToString();
+                cmbGrind.Text = dtgUpdateStock.SelectedRows[0].Cells[3].Value.ToString();
+                txtOrigin.Text = dtgUpdateStock.SelectedRows[0].Cells[4].Value.ToString();
+                txtPrice.Text = dtgUpdateStock.SelectedRows[0].Cells[5].Value.ToString();
+                txtStockQty.Text = dtgUpdateStock.SelectedRows[0].Cells[6].Value.ToString();
+                txtDescription.Text = dtgUpdateStock.SelectedRows[0].Cells[8].Value.ToString();
+                btnUpdate.Enabled = true;
+                btnCancelUpdate.Enabled = true;
+                btnAdd.Enabled = false;
+                btnDelete.Enabled = false;
+                btnEdit.Enabled = false;
+                pbCoffee.ImageLocation = targetPath + dtgUpdateStock.SelectedRows[0].Cells[1].Value + ".jpg";
+                btnSearch.Enabled = false;
+                btnClear.Enabled = false;
+                btnQuickSearch.Enabled = false;
+
+            }
+        }
+
+        private void dtgUpdateStock_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             pbUpdateCoffee.ImageLocation = targetPath + dtgUpdateStock.SelectedRows[0].Cells[1].Value + ".jpg";
             pbUpdateCoffee.SizeMode = PictureBoxSizeMode.CenterImage;
+        }
+
+        private void btnCancelUpdate_Click(object sender, EventArgs e)
+        {
+            // Check user is sure
+            var result = MessageBox.Show("Are you sure you wish to discard your changes?", "Exit editing this record?", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                // discard changes and display correct buttons
+                SetUpForm();
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            UpdateGrid(dtgUpdateStock,
+                "SELECT * FROM Coffee WHERE Name Like '%" + txtCoffeeName.Text + "%' AND Strength Like '%" +
+                cmbStrength.Text + "%' AND Grind Like '%" + cmbGrind.Text + "%' AND Origin Like '%" + txtOrigin.Text + "%' AND Price Like '%" + txtPrice.Text + "%'AND Qty Like '%" + txtStockQty.Text + "%'AND Description Like '%" + txtDescription.Text + "%'");
+            
+        }
+
+        private void btnQuickSearch_Click(object sender, EventArgs e)
+        {
+            UpdateGrid(dtgUpdateStock, "SELECT * FROM Coffee WHERE Name Like '%" + txtQuickSearch.Text + "%' Or Strength Like '%" + txtQuickSearch.Text + "%' Or Grind Like '%" + txtQuickSearch.Text + "%' Or Origin Like '%" + txtQuickSearch.Text + "%' Or Price Like '%" + txtQuickSearch.Text + "%' Or Qty Like '%" + txtQuickSearch.Text + "%' Or Description Like '%" + txtQuickSearch.Text + "%'");
+        
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            UpdateGrid(dtgUpdateStock,"SELECT * FROM Coffee");
+            SetUpForm();
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            // Check user is sure
+            var result = MessageBox.Show("Are you sure you want to update this record? ", "Amend this record?", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                SqlCommand updateCoffee = new SqlCommand("UPDATE Coffee SET Name = '" + txtCoffeeName.Text + "', Strength = '" + cmbStrength.Text + "', Grind = '" + cmbGrind.Text + "', Origin = '" + txtOrigin.Text + "', Price = '" + txtPrice.Text + "', Qty = '" + txtStockQty.Text + "', Picture = '" + txtCoffeeName.Text + ".jpg', Description = '" + txtDescription.Text + "' WHERE Id = " + editId, con);
+                con.Open();
+                updateCoffee.ExecuteNonQuery();
+                con.Close();
+                // update datagrid
+                UpdateGrid(dtgUpdateStock,"SELECT * FROM Coffee");
+                // updated changes so now display correct buttons
+                SetUpForm();
+
+            }
         }
 
         #endregion
     }
 
 }
+
