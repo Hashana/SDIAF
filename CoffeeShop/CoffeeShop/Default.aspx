@@ -15,8 +15,9 @@
         <div class="col-md-4">
             <h2>Coffee of the Month</h2>
             <p>
-               For May we have selected our  ... range as coffee of the month. 
-                ....ADD IMAGE AND EXPLANATION
+               For May we have selected Goldbeans our as coffee of the month. Why not give it a try yourself!
+                <br/>
+                <img src =" images/Coffee/Goldbeans.jpg" width:100px height:100px/>
           </p>
         </div>
         <div class="col-md-4">
