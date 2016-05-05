@@ -17,11 +17,16 @@ namespace CoffeeShop
         private string _grindSelected = "";
         private string _strengthSelected = "";
         private string _originSelected = "";
+        public bool originsSet = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             LoadCoffee("SELECT * FROM Coffee");
-            PopulateOrigins();
+            if (originsSet == false)
+            {
+                PopulateOrigins();
+            }
+                
         }
 
         private void LoadCoffee(string sql)
@@ -38,7 +43,8 @@ namespace CoffeeShop
                 lblCoffee.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Stock Available</th><th>Buy</th></tr><br/>";
                 while (reader.Read())
                 {
-                    lblCoffee.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td>" + reader["Qty"] + "</td><td><a href='/Purchase.aspx?='" + reader["Name"] + "'>Purchase</a></td></tr><br/>";
+                    lblCoffee.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td>" + reader["Qty"] + "</td><td><a href='/Quantity.aspx?='" + reader["Name"] + "'>Buy</a></td></tr><br/>";
+
                 }
                 lblCoffee.Text += "</table>";
 
@@ -74,16 +80,12 @@ namespace CoffeeShop
             txtQSearch.Text = "";
             ddlGrind.SelectedIndex = 0;
             ddlStrength.SelectedIndex = 0;
-            ddlOrigin.SelectedIndex = 0;
+            ddlOrigin.SelectedValue = "";
         }
 
         protected void PopulateOrigins()
         {
-            if (ddlGrind.Items.Count > 0)
-            {
-
-            }
-            else
+            if (!originsSet)
             {
                 SqlCommand getOrigins = new SqlCommand("SELECT Origin FROM Coffee", con);
                 SqlDataReader reader;
@@ -92,7 +94,7 @@ namespace CoffeeShop
                 {
                     ListItem newItem = new ListItem();
                     newItem.Text = "";
-                    newItem.Value = "0";
+                    newItem.Value = "";
                     ddlOrigin.Items.Add(newItem);
 
                     con.Open();
@@ -106,11 +108,16 @@ namespace CoffeeShop
                     }
                     reader.Close();
                     con.Close();
+                    originsSet = true;
                 }
                 catch (Exception err)
                 {
                     MessageBox.Show(err.StackTrace);
                 }
+            }
+            else
+            {
+                
 
             }
         }

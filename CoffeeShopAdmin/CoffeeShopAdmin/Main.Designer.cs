@@ -31,6 +31,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
             this.tpAdd = new System.Windows.Forms.TabPage();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnQuickSearch = new System.Windows.Forms.Button();
+            this.txtQuickSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnCancelUpdate = new System.Windows.Forms.Button();
             this.pbUpdateCoffee = new System.Windows.Forms.PictureBox();
@@ -56,20 +59,24 @@
             this.cmbGrind = new System.Windows.Forms.ComboBox();
             this.txtOrigin = new System.Windows.Forms.TextBox();
             this.txtCoffeeName = new System.Windows.Forms.TextBox();
-            this.txtQuickSearch = new System.Windows.Forms.TextBox();
-            this.btnQuickSearch = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.tpLowStock = new System.Windows.Forms.TabPage();
+            this.dtgLowStock = new System.Windows.Forms.DataGridView();
+            this.txtStockLevel = new System.Windows.Forms.TextBox();
+            this.btnUpdateStock = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tpAdd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbUpdateCoffee)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgUpdateStock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoffee)).BeginInit();
+            this.tpLowStock.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgLowStock)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tpMain);
             this.tabControl1.Controls.Add(this.tpAdd);
+            this.tabControl1.Controls.Add(this.tpLowStock);
             this.tabControl1.Location = new System.Drawing.Point(1, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -123,6 +130,33 @@
             this.tpAdd.Size = new System.Drawing.Size(806, 425);
             this.tpAdd.TabIndex = 1;
             this.tpAdd.Text = "Add Coffee";
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(319, 321);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 36);
+            this.btnClear.TabIndex = 35;
+            this.btnClear.Text = "Clear Results";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnQuickSearch
+            // 
+            this.btnQuickSearch.Location = new System.Drawing.Point(319, 292);
+            this.btnQuickSearch.Name = "btnQuickSearch";
+            this.btnQuickSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnQuickSearch.TabIndex = 34;
+            this.btnQuickSearch.Text = "Quicksearch";
+            this.btnQuickSearch.UseVisualStyleBackColor = true;
+            this.btnQuickSearch.Click += new System.EventHandler(this.btnQuickSearch_Click);
+            // 
+            // txtQuickSearch
+            // 
+            this.txtQuickSearch.Location = new System.Drawing.Point(213, 294);
+            this.txtQuickSearch.Name = "txtQuickSearch";
+            this.txtQuickSearch.Size = new System.Drawing.Size(100, 20);
+            this.txtQuickSearch.TabIndex = 33;
             // 
             // btnSearch
             // 
@@ -359,32 +393,49 @@
             this.txtCoffeeName.Size = new System.Drawing.Size(121, 20);
             this.txtCoffeeName.TabIndex = 8;
             // 
-            // txtQuickSearch
+            // tpLowStock
             // 
-            this.txtQuickSearch.Location = new System.Drawing.Point(213, 294);
-            this.txtQuickSearch.Name = "txtQuickSearch";
-            this.txtQuickSearch.Size = new System.Drawing.Size(100, 20);
-            this.txtQuickSearch.TabIndex = 33;
+            this.tpLowStock.BackColor = System.Drawing.Color.Tan;
+            this.tpLowStock.Controls.Add(this.btnUpdateStock);
+            this.tpLowStock.Controls.Add(this.txtStockLevel);
+            this.tpLowStock.Controls.Add(this.dtgLowStock);
+            this.tpLowStock.Location = new System.Drawing.Point(4, 22);
+            this.tpLowStock.Name = "tpLowStock";
+            this.tpLowStock.Size = new System.Drawing.Size(806, 425);
+            this.tpLowStock.TabIndex = 2;
+            this.tpLowStock.Text = "Low stock ";
             // 
-            // btnQuickSearch
+            // dtgLowStock
             // 
-            this.btnQuickSearch.Location = new System.Drawing.Point(319, 292);
-            this.btnQuickSearch.Name = "btnQuickSearch";
-            this.btnQuickSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnQuickSearch.TabIndex = 34;
-            this.btnQuickSearch.Text = "Quicksearch";
-            this.btnQuickSearch.UseVisualStyleBackColor = true;
-            this.btnQuickSearch.Click += new System.EventHandler(this.btnQuickSearch_Click);
+            this.dtgLowStock.AllowUserToAddRows = false;
+            this.dtgLowStock.AllowUserToDeleteRows = false;
+            this.dtgLowStock.AllowUserToResizeColumns = false;
+            this.dtgLowStock.AllowUserToResizeRows = false;
+            this.dtgLowStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgLowStock.Location = new System.Drawing.Point(25, 31);
+            this.dtgLowStock.MultiSelect = false;
+            this.dtgLowStock.Name = "dtgLowStock";
+            this.dtgLowStock.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtgLowStock.Size = new System.Drawing.Size(757, 222);
+            this.dtgLowStock.TabIndex = 0;
+            this.dtgLowStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgLowStock_CellContentClick);
             // 
-            // btnClear
+            // txtStockLevel
             // 
-            this.btnClear.Location = new System.Drawing.Point(319, 321);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 36);
-            this.btnClear.TabIndex = 35;
-            this.btnClear.Text = "Clear Results";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.txtStockLevel.Location = new System.Drawing.Point(81, 332);
+            this.txtStockLevel.Name = "txtStockLevel";
+            this.txtStockLevel.Size = new System.Drawing.Size(100, 20);
+            this.txtStockLevel.TabIndex = 1;
+            // 
+            // btnUpdateStock
+            // 
+            this.btnUpdateStock.Location = new System.Drawing.Point(187, 323);
+            this.btnUpdateStock.Name = "btnUpdateStock";
+            this.btnUpdateStock.Size = new System.Drawing.Size(75, 37);
+            this.btnUpdateStock.TabIndex = 2;
+            this.btnUpdateStock.Text = "Update Stock";
+            this.btnUpdateStock.UseVisualStyleBackColor = true;
+            this.btnUpdateStock.Click += new System.EventHandler(this.btnUpdateStock_Click);
             // 
             // Main
             // 
@@ -401,6 +452,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbUpdateCoffee)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgUpdateStock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoffee)).EndInit();
+            this.tpLowStock.ResumeLayout(false);
+            this.tpLowStock.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgLowStock)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -438,5 +492,9 @@
         private System.Windows.Forms.Button btnQuickSearch;
         private System.Windows.Forms.TextBox txtQuickSearch;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.TabPage tpLowStock;
+        private System.Windows.Forms.DataGridView dtgLowStock;
+        private System.Windows.Forms.Button btnUpdateStock;
+        private System.Windows.Forms.TextBox txtStockLevel;
     }
 }

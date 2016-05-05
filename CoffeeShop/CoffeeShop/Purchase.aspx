@@ -2,11 +2,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Purchase Details?</h2>
     <br/>
-    <asp:Label ID="lblTest" runat="server" Text="Name"></asp:Label>
+
+    <br/>
+    <asp:Label ID="lblName" runat="server" Text="Name"></asp:Label>
     <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
     <asp:Label ID="lblSurname" runat="server" Text="Surname"></asp:Label>
     <asp:TextBox ID="txtSurname" runat="server"></asp:TextBox>
-     <asp:Label ID="lblPostcode" runat="server" Text="Postcode"></asp:Label>
+   <asp:Label ID="lblPostcode" runat="server" Text="Postcode"></asp:Label>
     <asp:TextBox ID="txtPostcode" runat="server"></asp:TextBox>
      <asp:Label ID="lblHouseNumber" runat="server" Text="House Number"></asp:Label>
     <asp:TextBox ID="txtHouseNum" runat="server"></asp:TextBox>
@@ -15,5 +17,6 @@
     <br/>
     <br/>
      <asp:Label ID="lblAddress" runat="server" Text=""></asp:Label>
+
 
 </asp:Content>

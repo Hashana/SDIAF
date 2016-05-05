@@ -33,8 +33,10 @@ namespace CoffeeShop
             var response = new GeocodingService().GetResponse(request);
             var result = response.Results.First();
             // MessageBox.Show("Address = " + result.FormattedAddress, "address", MessageBoxButtons.OK);
-            lblAddress.Text = "Address:"+ txtHouseNum.Text  + result.FormattedAddress;
-            _address = txtHouseNum.Text + "," + result.FormattedAddress;;
+            // lblAddress.Text = "Address:"+ txtHouseNum.Text + " " + result.FormattedAddress;
+            //lblAddress.Text = "Address: " + txtHouseNum.Text + " " + result.AddressComponents.ElementAtOrDefault(0) + "\n" + result.AddressComponents.ElementAtOrDefault(1) + "\n" + result.AddressComponents.ElementAtOrDefault(2) + "\n" + result.AddressComponents.ElementAtOrDefault(3) + "\n" + result.AddressComponents.ElementAtOrDefault(4) + "\n" + result.AddressComponents.ElementAtOrDefault(5) + "\n" + result.AddressComponents.ElementAtOrDefault(6);
+            lblAddress.Text = "Address: " + "<br/>" + txtHouseNum.Text + " " + result.AddressComponents.ElementAt(1).LongName + "<br/>" + result.AddressComponents.ElementAt(2).LongName + "<br/>" + result.AddressComponents.ElementAt(3).LongName + "<br/>" + result.AddressComponents.ElementAt(4).LongName + "<br/>" + result.AddressComponents.ElementAt(0).LongName + "<br/>" + result.AddressComponents.ElementAt(5).ShortName;
+            _address = txtHouseNum.Text + "," + result.FormattedAddress;
         }
     }
 }

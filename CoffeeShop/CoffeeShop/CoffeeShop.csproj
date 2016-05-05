@@ -223,6 +223,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="GoogleMaps.LocationServices.readme.txt" />
     <Content Include="Purchase.aspx" />
+    <Content Include="Quantity.aspx" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -421,6 +422,13 @@
     </Compile>
     <Compile Include="Purchase.aspx.designer.cs">
       <DependentUpon>Purchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Quantity.aspx.cs">
+      <DependentUpon>Quantity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Quantity.aspx.designer.cs">
+      <DependentUpon>Quantity.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
