@@ -44,7 +44,7 @@ namespace CoffeeShop
                 lblCoffee.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Stock Available</th><th>Buy</th></tr><br/>";
                 while (reader.Read())
                 {
-                    lblCoffee.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td>" + reader["Qty"] + "</td><td><a href='/Quantity.aspx?='" + reader["Name"] + "'>Buy</a></td></tr><br/>";
+                    lblCoffee.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td>" + reader["Qty"] + "</td><td><form action ='Account/Cart.aspx?name=" + reader["Name"] + "' method='Post'><input type=submit  value ='Add To Cart' style='width: 100 % '></form></td></tr><br/>";
 
                 }
                 lblCoffee.Text += "</table>";
