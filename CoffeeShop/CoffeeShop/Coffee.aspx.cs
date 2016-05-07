@@ -18,6 +18,7 @@ namespace CoffeeShop
         private string _strengthSelected = "";
         private string _originSelected = "";
         public bool originsSet = false;
+        private int originListCount;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -85,9 +86,9 @@ namespace CoffeeShop
 
         protected void PopulateOrigins()
         {
-            if (!originsSet)
+            if (ddlOrigin.Items.Count == 0)
             {
-                SqlCommand getOrigins = new SqlCommand("SELECT Origin FROM Coffee", con);
+               SqlCommand getOrigins = new SqlCommand("SELECT DISTINCT Origin FROM Coffee", con);
                 SqlDataReader reader;
 
                 try
@@ -96,7 +97,6 @@ namespace CoffeeShop
                     newItem.Text = "";
                     newItem.Value = "";
                     ddlOrigin.Items.Add(newItem);
-
                     con.Open();
                     reader = getOrigins.ExecuteReader();
                     while (reader.Read())
@@ -109,18 +109,18 @@ namespace CoffeeShop
                     reader.Close();
                     con.Close();
                     originsSet = true;
+
+
                 }
                 catch (Exception err)
                 {
                     MessageBox.Show(err.StackTrace);
                 }
             }
-            else
-            {
-                
-
-            }
+           
         }
+
+            
 
         protected void ddlGrind_SelectedIndexChanged(object sender, EventArgs e)
         {

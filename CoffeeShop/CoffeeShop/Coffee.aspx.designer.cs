@@ -40,13 +40,13 @@ namespace CoffeeShop {
         protected global::System.Web.UI.WebControls.Button btnClearResults;
         
         /// <summary>
-        /// ddlGrind control.
+        /// lblStrength control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGrind;
+        protected global::System.Web.UI.WebControls.Label lblStrength;
         
         /// <summary>
         /// ddlStrength control.
@@ -56,6 +56,33 @@ namespace CoffeeShop {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlStrength;
+        
+        /// <summary>
+        /// lblGrind control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblGrind;
+        
+        /// <summary>
+        /// ddlGrind control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlGrind;
+        
+        /// <summary>
+        /// lblOrigin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOrigin;
         
         /// <summary>
         /// ddlOrigin control.
