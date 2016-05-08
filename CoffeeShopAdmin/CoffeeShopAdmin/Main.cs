@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,8 +17,10 @@ namespace CoffeeShopAdmin
     public partial class Main : Form
     {
         private string selectedFilePath = "";
-        private string targetPath = @"D:\Uni\SDIAF\Coffeeshop\images\";
+        private string targetPath = @"D:\Uni\SDIAF\Coffeeshop\Coffeeshop\Coffeeshop\images\Coffee\";
         private int editId;
+        private Timer myUpdateTimer;
+        private int _qty;
 
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=D:\Uni\SDIAF\CoffeeShop\CoffeeShop\CoffeeShop\App_Data\aspnet-CoffeeShop-20160418102437.mdf;Initial Catalog=aspnet-CoffeeShop-20160418102437;Integrated Security=True");
         public Main()
@@ -25,7 +29,22 @@ namespace CoffeeShopAdmin
             this.CenterToScreen();
             SetUpForm();
             UpdateGrid(dtgUpdateStock, "SELECT * From Coffee");
+            SetUpUpdateTimer(); 
+            AlertLowStock();
+            PopulateOrders();
         }
+
+        private void PopulateOrders()
+        {
+            //UpdateGrid(dtgOrders, "SELECT * FROM OrderLine");
+            var dt = new DataTable();
+            using (var da = new SqlDataAdapter("SELECT * FROM OrderLine", con))
+            {
+                da.Fill(dt);
+            }
+            dtgOrders.DataSource = dt.AsDataView();
+            con.Close();
+         }
 
         private void SetUpForm()
         {
@@ -124,12 +143,12 @@ namespace CoffeeShopAdmin
             grid.DataSource = dt.AsDataView();
             con.Close();
 
-            grid.AutoSize = true;
+            //grid.AutoSize = true;
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             grid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             grid.Columns[7].Visible = false;
-
+            grid.ClearSelection();
 
         }
 
@@ -187,6 +206,7 @@ namespace CoffeeShopAdmin
             {
                 // User has selected a single row - set up edit mode
                 editId = Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[0].Value);
+                _qty = Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[6].Value);
                 txtCoffeeName.Text = dtgUpdateStock.SelectedRows[0].Cells[1].Value.ToString();
                 cmbStrength.Text = dtgUpdateStock.SelectedRows[0].Cells[2].Value.ToString();
                 cmbGrind.Text = dtgUpdateStock.SelectedRows[0].Cells[3].Value.ToString();
@@ -203,6 +223,7 @@ namespace CoffeeShopAdmin
                 btnSearch.Enabled = false;
                 btnClear.Enabled = false;
                 btnQuickSearch.Enabled = false;
+                _qty =Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[6].Value);
 
             }
         }
@@ -255,15 +276,139 @@ namespace CoffeeShopAdmin
                 con.Open();
                 updateCoffee.ExecuteNonQuery();
                 con.Close();
-                // update datagrid
-                UpdateGrid(dtgUpdateStock,"SELECT * FROM Coffee");
+                
+
+                // check if qty changed and was below stock level
+                if (Convert.ToInt32(txtStockQty.Text) >= 1 && _qty < 10)
+                {
+                    CheckWhosWaiting(Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[0].Value));
+                    UpdateWaitingList(Convert.ToInt32(dtgUpdateStock.SelectedRows[0].Cells[0].Value));
+                }
                 // updated changes so now display correct buttons
+                UpdateGrid(dtgUpdateStock, "SELECT * FROM Coffee");
+                
                 SetUpForm();
 
             }
         }
 
         #endregion
+
+        private void AlertLowStock()
+        {
+            SqlCommand checkQty = new SqlCommand("SELECT * FROM Coffee WHERE Qty <= 10", con);
+            con.Open();
+            var dataReader = checkQty.ExecuteReader();
+
+            if (dataReader.HasRows)
+            {
+                con.Close();
+                MessageBox.Show("Low Stock requires attention!", "Low Stock Levels", MessageBoxButtons.OK);
+                UpdateGrid(dtgLowStock, "SELECT * FROM Coffee WHERE Qty <= 10");
+
+            }
+            else
+            {
+                con.Close();
+            }
+            dataReader.Close();
+        }
+
+        #region timer
+        private void myUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateGrid(dtgUpdateStock, "SELECT * FROM Coffee");
+            AlertLowStock();
+            PopulateOrders();
+        }
+
+        private void SetUpUpdateTimer()
+        {
+            myUpdateTimer = new Timer();
+            myUpdateTimer.Interval = (20 * 1000); // update every 20 seconds
+            myUpdateTimer.Tick += myUpdateTimer_Tick;
+            myUpdateTimer.Start();
+
+         }
+
+        #endregion
+
+        private void dtgLowStock_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            txtStockLevel.Text = dtgLowStock.SelectedRows[0].Cells[6].Value.ToString();
+        }
+
+        private void btnUpdateStock_Click(object sender, EventArgs e)
+        {
+            SqlCommand updateStock = new SqlCommand("UPDATE Coffee SET Qty =" + txtStockLevel.Text +  "WHERE Id = " + dtgLowStock.SelectedRows[0].Cells[0].Value, con);
+            con.Open();
+            updateStock.ExecuteNonQuery();
+            con.Close();
+            CheckWhosWaiting(Convert.ToInt32(dtgLowStock.SelectedRows[0].Cells[0].Value.ToString()));
+            UpdateGrid(dtgLowStock, "SELECT * FROM Coffee WHERE Qty <= 10");
+            txtStockLevel.Clear();
+            UpdateGrid(dtgUpdateStock, "SELECT * From Coffee");
+        }
+
+        private void CheckWhosWaiting(int itemId)
+        {
+            SqlCommand checkForReservations = new SqlCommand("SELECT * FROM WaitingForStock WHERE waitingFor = " + itemId + "AND emailSent = 0", con);
+            con.Open();
+            var dataReader = checkForReservations.ExecuteReader();
+            List<string> emails = new List<string>();
+            while (dataReader.Read())
+            {
+                var email = dataReader.GetValue(1);
+                emails.Add(email.ToString());
+
+            }
+            con.Close();
+            dataReader.Close();
+            SendEmails(emails);
+            // update db so future emails are not sent
+            UpdateWaitingList(itemId);
+
+        }
+
+        private void SendEmails(List<string> emails)
+        {
+            foreach (var email in emails)
+            {
+                // create mail and network credentials objects
+                MailMessage newMail = new MailMessage();
+                NetworkCredential credentials = new NetworkCredential("SDIAF1516@gmail.com", "UCPsdiaf1516");
+
+                // set up email
+                // Set up email details.
+                newMail.To.Add(email);
+                newMail.Subject = "The product you requested is back in stock!";
+                newMail.Body = "Hello valued customer,<br/><br/>Thank you for your patience whilst we sourced some more of your favourite coffee! <br/><br/>I am pleased to confirm that your requested coffee is now back in stock! <br/>Thank you for continuing to choose CoffeeCo! (SID:1340531/1)";
+                newMail.From = new MailAddress("SDIAF1516@gmail.com");
+                newMail.IsBodyHtml = true;
+   
+                // Connect to server to be sent from
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = credentials;
+                smtp.EnableSsl = true;
+                smtp.Port = 587;
+
+                // Send email
+                smtp.Send(newMail);
+
+                
+            }
+            MessageBox.Show("Your emails have been sent", "Emails Sent", MessageBoxButtons.OK);
+        }
+
+        private void UpdateWaitingList(int productId)
+        {
+            SqlCommand updateWaitingList = new SqlCommand("UPDATE WaitingForStock SET emailSent = 1 WHERE waitingFor =" + productId, con);
+            con.Open();
+            updateWaitingList.ExecuteNonQuery();
+            con.Close();
+
+        }
     }
 
 }
