@@ -10,18 +10,12 @@
             var form = $(this).closest('form');
             var max = $(this).closest('td').prev('td').html();
 
-            if ($(this).val() > max) {
-                alert($(this).val());        
-                alert(max);
-                alert("Sorry, we don't have that many");
-                form.submit();
-            } else {
-                var action = form.attr('action');
-                var array = action.split("=");
-                var newAction = array[0] + "=" + array[1] + "=" + array[2] + "=" + array[3] + "=" + $(this).val();
-                form.attr('action', newAction);
-                form.submit();
-            }
+            var action = form.attr('action');
+            var array = action.split("=");
+            var newAction = array[0] + "=" + array[1] + "=" + array[2] + "=" + array[3] + "=" + $(this).val();
+            form.attr('action', newAction);
+            form.submit();
+            
         });
     </script>
 </asp:Content>

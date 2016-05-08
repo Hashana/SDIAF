@@ -94,7 +94,7 @@ namespace CoffeeShop.Account
             // Set up email details.
             newMail.To.Add(email);
             newMail.Subject = "Thank you for your order!";
-            newMail.Body = "Hello valued customer,<br/><br/>Thank you for your purchase. <br/><br/>I am pleased to confirm that your order for coffee is being processed and will be with you within 5 working days!<br/><br/>Thank you for continuing to choose CoffeeCo!";
+            newMail.Body = "Hello valued customer,<br/><br/>Thank you for your purchase. <br/><br/>I am pleased to confirm that your order for coffee is being processed and will be with you within 5 working days!<br/><br/>Thank you for continuing to choose CoffeeCo!  (SID:1340531/1)";
             newMail.From = new MailAddress("SDIAF1516@gmail.com");
             newMail.IsBodyHtml = true;
 

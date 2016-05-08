@@ -19,13 +19,6 @@ namespace CoffeeShop.Account
         private string _todo;
         private string _qty;
         private List<string> cartItems = new List<string>();
-     
-        //public List<string> CartItems
-        //{
-        //    get { return cartItems; }
-        //    set { cartItems = value; }
-        //}
-
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -44,7 +37,20 @@ namespace CoffeeShop.Account
             {
                 if (CartItems.CheckItemExists(_name, _price) == false)
                 {
-                    CartItems.AddItem(_name, _price);
+                    SqlCommand checkQty = new SqlCommand("SELECT * FROM Coffee WHERE Name ='" + _name + "'", con);
+                    con.Open();
+                    SqlDataReader reader = checkQty.ExecuteReader();
+                    reader.Read();
+                    if (Convert.ToInt32(reader["Qty"]) == 0)
+                    {
+                        CartItems.AddItem(_name, _price, 0);
+                    }
+                    else
+                    {
+                        CartItems.AddItem(_name, _price, 1);
+                    }
+                    reader.Close();
+                    con.Close();
                 }
         
                 
@@ -55,13 +61,29 @@ namespace CoffeeShop.Account
             }
             else if (_todo == "update")
             {
-                CartItems.SetQuantity(_name, Convert.ToInt32(_qty));
+                SqlCommand getItem = new SqlCommand("SELECT * FROM Coffee WHERE Name ='" + _name + "'", con);
+                con.Open();
+                SqlDataReader reader = getItem.ExecuteReader();
+                reader.Read();
+
+                if (Convert.ToInt32(_qty) <= Convert.ToInt32(reader["Qty"]))
+                {
+                    CartItems.SetQuantity(_name, Convert.ToInt32(_qty));
+                }
+                else
+                {
+                    CartItems.SetQuantity(_name, Convert.ToInt32(reader["Qty"]));
+                }
+
+                reader.Close();
+                con.Close();
+
             }
             
           
             if (CartItems.GetCount() != 0)
             {
-                lblCart.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Available</th><th>Required</th><th>Remove?</th></tr>";
+                lblCart.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Available</th><th>Required</th><th>Action</th></tr>";
 
                 lblCart.Text +=
                     "<tr style='display:none;'><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><form><input type='submit'></form></td></tr>";
@@ -73,7 +95,16 @@ namespace CoffeeShop.Account
                     SqlDataReader reader = getItem.ExecuteReader();
                     while (reader.Read())
                     {
-                       lblCart.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td class='maxqty'>" + reader["Qty"] + "</td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=update&qty=" + CartItems.GetQuantity(reader["Name"].ToString()) + "' method='Post'><input type='number' max='" + reader["Qty"] + "' min='1' id='qtyBox" + reader["Name"] + "' value='" + CartItems.GetQuantity(reader["Name"].ToString()) + "' /></form></td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=remove' method='Post'><input type='submit'  value ='Remove' style='width: 100 % '></form></td></tr>";
+                        if (Convert.ToInt32(reader["Qty"]) == 0)
+                        {
+                            lblCart.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td class='maxqty'>" + reader["Qty"] + "</td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=update&qty=" + CartItems.GetQuantity(reader["Name"].ToString()) + "' method='Post'><input type='number' max='" + reader["Qty"] + "' min='1' id='qtyBox" + reader["Name"] + "' value='" + CartItems.GetQuantity(reader["Name"].ToString()) + "' /></form></td><td><form action='RequestEmail.aspx?product=" + reader["Id"] + "&productName="+reader["Name"]+ "' method='Post'><input type='submit'  value ='Request Email' style='width: 100 % '></form></td></tr>";
+                        }
+                        else
+                        {
+                            lblCart.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td class='maxqty'>" + reader["Qty"] + "</td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=update&qty=" + CartItems.GetQuantity(reader["Name"].ToString()) + "' method='Post'><input type='number' max='" + reader["Qty"] + "' min='1' id='qtyBox" + reader["Name"] + "' value='" + CartItems.GetQuantity(reader["Name"].ToString()) + "' /></form></td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=remove' method='Post'><input type='submit'  value ='Remove' style='width: 100 % '></form></td></tr>";
+                        }
+
+                     
                     }
                     con.Close();
                     reader.Close();

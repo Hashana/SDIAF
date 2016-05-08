@@ -206,6 +206,8 @@
     <Content Include="Account\PaymentConf.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="Account\Requested.aspx" />
+    <Content Include="Account\RequestEmail.aspx" />
     <Content Include="Account\ResetPassword.aspx" />
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
@@ -374,6 +376,20 @@
     </Compile>
     <Compile Include="Account\RegisterExternalLogin.aspx.designer.cs">
       <DependentUpon>RegisterExternalLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Requested.aspx.cs">
+      <DependentUpon>Requested.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Requested.aspx.designer.cs">
+      <DependentUpon>Requested.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\RequestEmail.aspx.cs">
+      <DependentUpon>RequestEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\RequestEmail.aspx.designer.cs">
+      <DependentUpon>RequestEmail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Account\ResetPassword.aspx.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>

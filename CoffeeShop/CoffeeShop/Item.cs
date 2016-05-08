@@ -11,11 +11,11 @@ namespace CoffeeShop
         public string Price { get; set; }
         public int Quantity { get; set; }
 
-        public Item(string name, string price)
+        public Item(string name, string price, int qty)
         {
             Name = name;
             Price = price;
-            Quantity = 1;
+            Quantity = qty;
         }
 
         

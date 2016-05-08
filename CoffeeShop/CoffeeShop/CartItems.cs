@@ -27,9 +27,9 @@ namespace CoffeeShop
             }
         }
 
-        public static void AddItem(string name,string price)
+        public static void AddItem(string name,string price, int qty)
         {
-            Items.Add(new Item(name, price));
+            Items.Add(new Item(name, price, qty));
         }
 
         public static void RemoveItem(string name)
@@ -47,11 +47,6 @@ namespace CoffeeShop
         {
             bool exists = Items.Exists(x => x.Name == name);
             return exists;
-            //if (Items.Contains(new Item(name, price)))
-            //{
-            //    return true;
-            //}
-            //return false;
         }
 
         public static double GetCost()

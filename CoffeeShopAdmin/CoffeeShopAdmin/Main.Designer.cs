@@ -60,16 +60,21 @@
             this.txtOrigin = new System.Windows.Forms.TextBox();
             this.txtCoffeeName = new System.Windows.Forms.TextBox();
             this.tpLowStock = new System.Windows.Forms.TabPage();
-            this.dtgLowStock = new System.Windows.Forms.DataGridView();
-            this.txtStockLevel = new System.Windows.Forms.TextBox();
             this.btnUpdateStock = new System.Windows.Forms.Button();
+            this.txtStockLevel = new System.Windows.Forms.TextBox();
+            this.dtgLowStock = new System.Windows.Forms.DataGridView();
+            this.dtgOrders = new System.Windows.Forms.DataGridView();
+            this.lblLowStock = new System.Windows.Forms.Label();
+            this.lblOrdersPlaced = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
+            this.tpMain.SuspendLayout();
             this.tpAdd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbUpdateCoffee)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgUpdateStock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoffee)).BeginInit();
             this.tpLowStock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgLowStock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgOrders)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -86,6 +91,8 @@
             // tpMain
             // 
             this.tpMain.BackColor = System.Drawing.Color.Tan;
+            this.tpMain.Controls.Add(this.lblOrdersPlaced);
+            this.tpMain.Controls.Add(this.dtgOrders);
             this.tpMain.Location = new System.Drawing.Point(4, 22);
             this.tpMain.Name = "tpMain";
             this.tpMain.Padding = new System.Windows.Forms.Padding(3);
@@ -129,7 +136,7 @@
             this.tpAdd.Padding = new System.Windows.Forms.Padding(3);
             this.tpAdd.Size = new System.Drawing.Size(806, 425);
             this.tpAdd.TabIndex = 1;
-            this.tpAdd.Text = "Add Coffee";
+            this.tpAdd.Text = "Add/Edit Coffee";
             // 
             // btnClear
             // 
@@ -228,6 +235,7 @@
             this.dtgUpdateStock.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dtgUpdateStock.Size = new System.Drawing.Size(628, 226);
             this.dtgUpdateStock.TabIndex = 26;
+            this.dtgUpdateStock.TabStop = false;
             this.dtgUpdateStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgUpdateStock_CellContentClick_1);
             // 
             // label7
@@ -396,6 +404,7 @@
             // tpLowStock
             // 
             this.tpLowStock.BackColor = System.Drawing.Color.Tan;
+            this.tpLowStock.Controls.Add(this.lblLowStock);
             this.tpLowStock.Controls.Add(this.btnUpdateStock);
             this.tpLowStock.Controls.Add(this.txtStockLevel);
             this.tpLowStock.Controls.Add(this.dtgLowStock);
@@ -404,28 +413,6 @@
             this.tpLowStock.Size = new System.Drawing.Size(806, 425);
             this.tpLowStock.TabIndex = 2;
             this.tpLowStock.Text = "Low stock ";
-            // 
-            // dtgLowStock
-            // 
-            this.dtgLowStock.AllowUserToAddRows = false;
-            this.dtgLowStock.AllowUserToDeleteRows = false;
-            this.dtgLowStock.AllowUserToResizeColumns = false;
-            this.dtgLowStock.AllowUserToResizeRows = false;
-            this.dtgLowStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgLowStock.Location = new System.Drawing.Point(25, 31);
-            this.dtgLowStock.MultiSelect = false;
-            this.dtgLowStock.Name = "dtgLowStock";
-            this.dtgLowStock.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgLowStock.Size = new System.Drawing.Size(757, 222);
-            this.dtgLowStock.TabIndex = 0;
-            this.dtgLowStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgLowStock_CellContentClick);
-            // 
-            // txtStockLevel
-            // 
-            this.txtStockLevel.Location = new System.Drawing.Point(81, 332);
-            this.txtStockLevel.Name = "txtStockLevel";
-            this.txtStockLevel.Size = new System.Drawing.Size(100, 20);
-            this.txtStockLevel.TabIndex = 1;
             // 
             // btnUpdateStock
             // 
@@ -437,6 +424,56 @@
             this.btnUpdateStock.UseVisualStyleBackColor = true;
             this.btnUpdateStock.Click += new System.EventHandler(this.btnUpdateStock_Click);
             // 
+            // txtStockLevel
+            // 
+            this.txtStockLevel.Location = new System.Drawing.Point(81, 332);
+            this.txtStockLevel.Name = "txtStockLevel";
+            this.txtStockLevel.Size = new System.Drawing.Size(100, 20);
+            this.txtStockLevel.TabIndex = 1;
+            // 
+            // dtgLowStock
+            // 
+            this.dtgLowStock.AllowUserToAddRows = false;
+            this.dtgLowStock.AllowUserToDeleteRows = false;
+            this.dtgLowStock.AllowUserToResizeColumns = false;
+            this.dtgLowStock.AllowUserToResizeRows = false;
+            this.dtgLowStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgLowStock.Location = new System.Drawing.Point(30, 40);
+            this.dtgLowStock.MultiSelect = false;
+            this.dtgLowStock.Name = "dtgLowStock";
+            this.dtgLowStock.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtgLowStock.Size = new System.Drawing.Size(757, 222);
+            this.dtgLowStock.TabIndex = 0;
+            this.dtgLowStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgLowStock_CellContentClick);
+            // 
+            // dtgOrders
+            // 
+            this.dtgOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgOrders.Location = new System.Drawing.Point(27, 73);
+            this.dtgOrders.Name = "dtgOrders";
+            this.dtgOrders.Size = new System.Drawing.Size(523, 280);
+            this.dtgOrders.TabIndex = 0;
+            // 
+            // lblLowStock
+            // 
+            this.lblLowStock.AutoSize = true;
+            this.lblLowStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLowStock.Location = new System.Drawing.Point(25, 12);
+            this.lblLowStock.Name = "lblLowStock";
+            this.lblLowStock.Size = new System.Drawing.Size(168, 25);
+            this.lblLowStock.TabIndex = 3;
+            this.lblLowStock.Text = "Low Stock Items";
+            // 
+            // lblOrdersPlaced
+            // 
+            this.lblOrdersPlaced.AutoSize = true;
+            this.lblOrdersPlaced.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOrdersPlaced.Location = new System.Drawing.Point(22, 23);
+            this.lblOrdersPlaced.Name = "lblOrdersPlaced";
+            this.lblOrdersPlaced.Size = new System.Drawing.Size(149, 25);
+            this.lblOrdersPlaced.TabIndex = 4;
+            this.lblOrdersPlaced.Text = "Orders Placed";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -447,6 +484,8 @@
             this.Name = "Main";
             this.Text = "Main";
             this.tabControl1.ResumeLayout(false);
+            this.tpMain.ResumeLayout(false);
+            this.tpMain.PerformLayout();
             this.tpAdd.ResumeLayout(false);
             this.tpAdd.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbUpdateCoffee)).EndInit();
@@ -455,6 +494,7 @@
             this.tpLowStock.ResumeLayout(false);
             this.tpLowStock.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgLowStock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgOrders)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -496,5 +536,8 @@
         private System.Windows.Forms.DataGridView dtgLowStock;
         private System.Windows.Forms.Button btnUpdateStock;
         private System.Windows.Forms.TextBox txtStockLevel;
+        private System.Windows.Forms.DataGridView dtgOrders;
+        private System.Windows.Forms.Label lblOrdersPlaced;
+        private System.Windows.Forms.Label lblLowStock;
     }
 }

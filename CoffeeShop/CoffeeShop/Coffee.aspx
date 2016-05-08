@@ -12,7 +12,7 @@
         <asp:ListItem>Light to Medium Roast</asp:ListItem>
         <asp:ListItem>Medium Roast</asp:ListItem>
         <asp:ListItem>Medium to Dark Roast</asp:ListItem>
-        <asp:ListItem>Dark Roast </asp:ListItem>
+        <asp:ListItem>Dark Roast</asp:ListItem>
         <asp:ListItem>Very Dark Roast</asp:ListItem>
     </asp:DropDownList>
     <asp:Label ID="lblGrind" runat="server" Text="Grind"></asp:Label>

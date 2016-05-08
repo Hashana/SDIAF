@@ -128,16 +128,11 @@ namespace CoffeeShop
 
         protected void ddlGrind_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlGrind.SelectedIndex == 0)
-            {
-                _grindSelected = "";
-            }
-            else
-            {
-                _grindSelected = ddlGrind.SelectedValue.ToString();
-            }
-           
-            CheckSelectedValues();
+
+           _grindSelected = ddlGrind.SelectedValue;
+           _originSelected = ddlOrigin.SelectedValue;
+           _strengthSelected = ddlStrength.SelectedValue;
+           CheckSelectedValues();
             
         }
 
@@ -183,29 +178,17 @@ namespace CoffeeShop
 
         protected void ddlStrength_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(ddlStrength.SelectedIndex == 0)
-            {
-                _strengthSelected = "";
-            }
-            else
-            {
-                _strengthSelected = ddlStrength.SelectedValue;
-            }
-            
+            _grindSelected = ddlGrind.SelectedValue;
+            _originSelected = ddlOrigin.SelectedValue;
+            _strengthSelected = ddlStrength.SelectedValue;
             CheckSelectedValues();
         }
 
         protected void ddlOrigin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlOrigin.SelectedIndex == 0)
-            {
-                _originSelected = "";
-            }
-            else
-            {
-                _originSelected = ddlOrigin.SelectedValue;
-            }
-
+            _grindSelected = ddlGrind.SelectedValue;
+            _originSelected = ddlOrigin.SelectedValue;
+            _strengthSelected = ddlStrength.SelectedValue;
             CheckSelectedValues();
         }
     }
