@@ -7,7 +7,7 @@ namespace CoffeeShop
 {
     public class CartItems
     {
-        public static List<string> Items { get; private set; }
+        public static List<Item> Items { get; private set; }
 
         public static readonly CartItems Instance;
 
@@ -18,7 +18,7 @@ namespace CoffeeShop
             if (HttpContext.Current.Session["ShoppingCart"] == null)
             {
                 Instance = new CartItems();
-                CartItems.Items = new List<string>();
+                CartItems.Items = new List<Item>();
                 HttpContext.Current.Session["ShoppingCart"] = Instance;
             }
             else
@@ -27,14 +27,15 @@ namespace CoffeeShop
             }
         }
 
-        public static void AddItem(string name)
+        public static void AddItem(string name,string price)
         {
-            Items.Add(name);
+            Items.Add(new Item(name, price));
         }
 
         public static void RemoveItem(string name)
         {
-            Items.Remove(name);
+            var item = Items.First(x => x.Name == name);
+            Items.Remove(item);
         }
 
         public static int GetCount()
@@ -42,5 +43,37 @@ namespace CoffeeShop
             return Items.Count;
         }
 
+        public static bool CheckItemExists(string name, string price)
+        {
+            if (Items.Contains(new Item(name, price)))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static double GetCost()
+        {
+            double cost = 0.0;
+            foreach (var item in Items)
+            {
+                var itemCost = Convert.ToDouble(item.Price) * item.Quantity;
+                cost += itemCost;
+            }
+            
+            return cost;
+        }
+
+        public static int GetQuantity(string name)
+        {
+            var item = Items.First(x => x.Name == name);
+            return item.Quantity;
+        }
+
+        public static void SetQuantity(string name, int quantity)
+        {
+            var item = Items.First(x => x.Name == name);
+            item.Quantity = quantity;
+        }
     }
 }

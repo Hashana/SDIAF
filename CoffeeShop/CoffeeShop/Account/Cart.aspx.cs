@@ -15,6 +15,9 @@ namespace CoffeeShop.Account
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=D:\Uni\SDIAF\CoffeeShop\CoffeeShop\CoffeeShop\App_Data\aspnet-CoffeeShop-20160418102437.mdf;Initial Catalog=aspnet-CoffeeShop-20160418102437;Integrated Security=True");
 
         private string _name;
+        private string _price;
+        private string _todo;
+        private string _qty;
         private List<string> cartItems = new List<string>();
      
         //public List<string> CartItems
@@ -27,33 +30,59 @@ namespace CoffeeShop.Account
         protected void Page_Load(object sender, EventArgs e)
         {
            LoadCart();
+            
         }
 
         private void LoadCart()
         {
             _name = Request.QueryString["name"];
-          // MessageBox.Show(_name, _name, MessageBoxButtons.OK);
-           //     cartItems.Add(_name);
-            CartItems.AddItem(_name);
+            _price = Request.QueryString["price"];
+            _todo = Request.QueryString["todo"];
+            _qty = Request.QueryString["qty"];
+
+            if (_todo == "add")
+            {
+                if (CartItems.CheckItemExists(_name, _price) == false)
+                {
+                    CartItems.AddItem(_name, _price);
+                }
+        
+                
+            }
+            else if (_todo == "remove")
+            {
+                CartItems.RemoveItem(_name);
+            }
+            else if (_todo == "update")
+            {
+                CartItems.SetQuantity(_name, Convert.ToInt32(_qty));
+            }
+            
           
             if (CartItems.GetCount() != 0)
             {
-                lblCart.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Stock Available</th><th>Quantity</th><th>Remove Item?</th></tr><br/>";
+                lblCart.Text = "<table  style='width:100%'><tr><th>Name</th><th>Strength</th><th>Grind</th><th>Origin</th><th>Price</th><th>Picture</th><th>Description</th><th>Available</th><th>Required</th><th>Remove?</th></tr>";
+
+                lblCart.Text +=
+                    "<tr style='display:none;'><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><form><input type='submit'></form></td></tr>";
+
                 foreach (var item in CartItems.Items)
                 {
-                    SqlCommand getItem = new SqlCommand("SELECT * FROM Coffee WHERE Name ='" + item + "'", con);
+                    SqlCommand getItem = new SqlCommand("SELECT * FROM Coffee WHERE Name ='" + item.Name + "'", con);
                     con.Open();
                     SqlDataReader reader = getItem.ExecuteReader();
                     while (reader.Read())
                     {
-                       lblCart.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td>" + reader["Qty"] + "</td><td><input type='text'/</td><td><form action ='Account/Cart.aspx?name=" + reader["Name"] + "' method='Post'><input type=submit  value ='Remove' style='width: 100 % '></form></tr><br/>";
-
+                       lblCart.Text += "<tr><td>" + reader["Name"] + "</td><td>" + reader["Strength"] + "</td><td>" + reader["Grind"] + "</td><td>" + reader["Origin"] + "</td><td>" + reader["Price"] + "</td><td><img src ='/images/Coffee/" + reader["Name"] + ".jpg' height='60' width='60'</td><td>" + reader["Description"] + "</td><td class='maxqty'>" + reader["Qty"] + "</td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=update&qty=" + CartItems.GetQuantity(reader["Name"].ToString()) + "' method='Post'><input type='number' max='" + reader["Qty"] + "' min='1' id='qtyBox" + reader["Name"] + "' value='" + CartItems.GetQuantity(reader["Name"].ToString()) + "' /></form></td><td><form action='Cart.aspx?name=" + reader["Name"] + "&price=" + reader["Price"] + "&todo=remove' method='Post'><input type='submit'  value ='Remove' style='width: 100 % '></form></td></tr>";
                     }
                     con.Close();
                     reader.Close();
                     
+
                 }
                 lblCart.Text += "</table>";
+                lblSubTotal.Text = "<br/>Subtotal: " + CartItems.GetCost();
+                lblProceedToPayment.Text = "<br/> ";
             }
             else
             {
@@ -61,9 +90,5 @@ namespace CoffeeShop.Account
             }
         }
 
-        protected void RemoveCartItem(string item)
-        {
-            CartItems.RemoveItem(item);
-        }
-    }
+  }
 }

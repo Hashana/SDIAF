@@ -26,5 +26,6 @@
     </asp:DropDownList>
    <asp:Label ID="lblOrigin" runat="server" Text="Origin"></asp:Label>
     <asp:DropDownList ID="ddlOrigin" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlOrigin_SelectedIndexChanged"/>
+    <br/>
        <asp:Label ID="lblCoffee" runat="server" Text="L"></asp:Label>
 </asp:Content>
