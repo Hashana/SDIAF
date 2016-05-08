@@ -81,8 +81,8 @@ namespace CoffeeShop.Account
 
                 }
                 lblCart.Text += "</table>";
-                lblSubTotal.Text = "<br/>Subtotal: " + CartItems.GetCost();
-                lblProceedToPayment.Text = "<br/> ";
+                lblSubTotal.Text = "<br/>Subtotal: £" + CartItems.GetCost()+ " <br/>Shipping Fee: £2.99 <br/><br/>Total Cost: £" + (CartItems.GetCost() + 2.99);
+                lblProceedToPayment.Text = "<br/><br/><form action='Purchase.aspx?' method='Post'><input type='submit'  value ='Proceed To Payment' style='width: 100 % '></form>";
             }
             else
             {

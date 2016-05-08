@@ -11,6 +11,8 @@
             var max = $(this).closest('td').prev('td').html();
 
             if ($(this).val() > max) {
+                alert($(this).val());        
+                alert(max);
                 alert("Sorry, we don't have that many");
                 form.submit();
             } else {
