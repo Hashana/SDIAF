@@ -45,11 +45,13 @@ namespace CoffeeShop
 
         public static bool CheckItemExists(string name, string price)
         {
-            if (Items.Contains(new Item(name, price)))
-            {
-                return true;
-            }
-            return false;
+            bool exists = Items.Exists(x => x.Name == name);
+            return exists;
+            //if (Items.Contains(new Item(name, price)))
+            //{
+            //    return true;
+            //}
+            //return false;
         }
 
         public static double GetCost()
